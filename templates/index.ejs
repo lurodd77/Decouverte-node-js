@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>PokeApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<section class="hero hero-home">
+  <div class="container hero-home__inner">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5 text-center text-lg-start">
+        <p class="hero-kicker mb-3">Node.js • Express • PokeAPI</p>
+        <h1 class="display-3 fw-bold mb-3">Un Pokedex vivant, rapide et responsive.</h1>
+        <p class="lead mb-4">
+          Explore les Pokemon, trie-les comme tu veux, passe en vue galerie ou liste, puis ouvre chaque fiche detaillee.
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+          <a href="/objets" class="btn btn-dark btn-lg">Explorer le Pokedex</a>
+          <a href="#apercu" class="btn btn-outline-light btn-lg">Voir les apercus</a>
+        </div>
+
+        <div class="hero-stats mt-4">
+          <div class="hero-stat-pill"><strong>151</strong><span>Pokemon</span></div>
+          <div class="hero-stat-pill"><strong>2</strong><span>modes d'affichage</span></div>
+          <div class="hero-stat-pill"><strong>100%</strong><span>responsive</span></div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="hero-showcase" id="apercu">
+          <% if (featuredRows && featuredRows.length) { %>
+            <% featuredRows.forEach((row, rowIndex) => { %>
+              <div class="gallery-marquee <%= rowIndex % 2 === 1 ? 'gallery-marquee--reverse' : '' %>">
+                <div class="gallery-track">
+                  <% row.concat(row).forEach((pokemon) => { %>
+                    <a class="sample-card" href="/objets/<%= pokemon.id %>">
+                      <span class="sample-card__id">#<%= pokemon.id %></span>
+                      <img src="<%= pokemon.image %>" alt="<%= pokemon.name %>" loading="lazy">
+                      <span class="sample-card__name text-capitalize"><%= pokemon.name %></span>
+                    </a>
+                  <% }) %>
+                </div>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container my-5">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="feature-panel h-100">
+        <p class="feature-panel__label">Navigation</p>
+        <h2 class="h4">Passe d'un univers a l'autre</h2>
+        <p class="text-muted mb-0">Accueil, Pokedex, details, favoris et contact avec une navigation claire sur mobile comme sur desktop.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-panel h-100">
+        <p class="feature-panel__label">Affichage</p>
+        <h2 class="h4">Vue galerie ou vue liste</h2>
+        <p class="text-muted mb-0">Choisis la presentation qui te convient, sans perdre les filtres ni le tri en cours.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-panel h-100">
+        <p class="feature-panel__label">Details</p>
+        <h2 class="h4">Chaque carte ouvre une fiche</h2>
+        <p class="text-muted mb-0">Description, evolutions, capacites et objets tenus sont accessibles depuis chaque Pokemon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container home-journey my-5">
+  <div class="section-heading text-center mb-4">
+    <p class="feature-panel__label mb-2">Parcours</p>
+    <h2 class="fw-bold">Une exploration simple en 3 etapes</h2>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="journey-card h-100">
+        <span class="journey-card__step">01</span>
+        <h3 class="h5">Repere les favoris</h3>
+        <p class="text-muted mb-0">Parcours rapidement les apercus et repere les Pokemon qui attirent l'oeil.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="journey-card h-100">
+        <span class="journey-card__step">02</span>
+        <h3 class="h5">Choisis ton affichage</h3>
+        <p class="text-muted mb-0">Bascule entre galerie et liste selon que tu veux une vue visuelle ou plus directe.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="journey-card h-100">
+        <span class="journey-card__step">03</span>
+        <h3 class="h5">Ouvre la fiche detail</h3>
+        <p class="text-muted mb-0">Chaque carte mene vers une page detaillee avec evolutions, capacites et objets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container my-5">
+  <div class="info-ribbon">
+    <div class="info-ribbon__item">
+      <strong>Recherche rapide</strong>
+      <span>Filtre les Pokemon en quelques lettres.</span>
+    </div>
+    <div class="info-ribbon__item">
+      <strong>Tri flexible</strong>
+      <span>Par numero ou par nom selon ton besoin.</span>
+    </div>
+    <div class="info-ribbon__item">
+      <strong>Design responsive</strong>
+      <span>Navigation propre sur mobile et desktop.</span>
+    </div>
+  </div>
+</section>
+
+<section class="container my-5">
+  <% if (pokemonOfDay) { %>
+    <div class="pokemon-day-card">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-4 text-center">
+          <img class="pokemon-day-card__img" src="<%= pokemonOfDay.image %>" alt="<%= pokemonOfDay.name %>" loading="lazy">
+        </div>
+        <div class="col-lg-8 text-center text-lg-start">
+          <p class="feature-panel__label mb-2">Selection du jour</p>
+          <h2 class="fw-bold mb-2">Ton Pokemon du jour : <span class="text-capitalize"><%= pokemonOfDay.name %></span></h2>
+          <p class="text-muted mb-4">Une suggestion simple pour lancer ta visite. Ouvre sa fiche, explore ses evolutions puis continue dans la galerie.</p>
+          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+            <a href="/objets/<%= pokemonOfDay.id %>" class="btn btn-primary">Voir sa fiche</a>
+            <a href="/objets" class="btn btn-outline-primary">Continuer l'exploration</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<section class="cta-band text-center">
+  <div class="container">
+    <h2 class="fw-bold mb-3">Pret a explorer le Pokedex ?</h2>
+    <p class="mb-4">Entre directement dans la galerie et teste aussi la vue liste.</p>
+    <a href="/objets" class="btn btn-warning btn-lg">Commencer maintenant</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+</body>
+</html>

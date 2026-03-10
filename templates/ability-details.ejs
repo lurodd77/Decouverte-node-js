@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= ability.name %></title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<div class="container my-5">
+
+  <div class="pokemon-card">
+
+    <h1 class="text-capitalize mb-3">✨ <%= ability.name %></h1>
+
+    <p class="alert alert-info">
+      <%= short.replace(/\f/g, ' ') %>
+    </p>
+
+    <h4>Description complète</h4>
+    <p><%= effect.replace(/\f/g, ' ') %></p>
+
+    <h4 class="mt-4">Pokémon ayant cette capacité</h4>
+    <div class="d-flex flex-wrap gap-2">
+      <% ability.pokemon.slice(0, 20).forEach(p => { %>
+        <a
+          href="/objets/<%= p.pokemon.name %>"
+          class="badge bg-secondary text-decoration-none text-capitalize"
+        >
+          <%= p.pokemon.name %>
+        </a>
+      <% }) %>
+    </div>
+
+    <div class="mt-5">
+      <a href="javascript:history.back()" class="btn btn-secondary">⬅ Retour</a>
+    </div>
+
+  </div>
+
+</div>
+
+<%- include('partials/footer') %>
+</body>
+</html>

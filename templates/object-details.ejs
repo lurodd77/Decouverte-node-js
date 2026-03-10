@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= pokemon.name %> - Details</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body class="type-bg-<%= pokemon.types[0].type.name %> type-accent-<%= pokemon.types[0].type.name %>">
+
+<%- include('partials/header') %>
+
+<div class="container my-5">
+  <div class="pokemon-card pokemon-detail-shell">
+    <div class="row g-4 align-items-center pokemon-detail-hero">
+      <div class="col-lg-4 text-center">
+        <div class="pokemon-hero-art">
+          <img
+            src="<%= pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default %>"
+            class="pokemon-img pokemon-detail-main-image"
+            alt="<%= pokemon.name %>"
+            loading="lazy"
+          >
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3 mb-3">
+          <div>
+            <p class="feature-panel__label mb-2">Fiche detail</p>
+            <h1 class="text-capitalize mb-1"><%= pokemon.name %></h1>
+            <div class="text-muted">Pokemon #<%= pokemon.id %></div>
+          </div>
+
+          <div class="d-flex flex-column flex-sm-row gap-2">
+            <button
+              id="favBtn"
+              class="btn btn-outline-danger btn-sm"
+              data-id="<%= pokemon.id %>"
+              data-name="<%= pokemon.name %>"
+            >
+              Ajouter aux favoris
+            </button>
+
+            <% if (pokemon.cries && pokemon.cries.latest) { %>
+              <button class="btn btn-outline-secondary btn-sm btn-cry" onclick="playCry()">
+                Ecouter le cri
+              </button>
+              <audio id="pokemonCry">
+                <source src="<%= pokemon.cries.latest %>" type="audio/ogg">
+              </audio>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <% pokemon.types.forEach((t) => { %>
+            <span class="type-badge type-<%= t.type.name %>"><%= t.type.name %></span>
+          <% }) %>
+        </div>
+
+        <div class="pokemon-description-card mb-4">
+          <em><%= description.replace(/\f/g, ' ') %></em>
+        </div>
+
+        <div class="detail-metrics">
+          <div class="detail-metric">
+            <span class="detail-metric__label">Taille</span>
+            <strong><%= (pokemon.height / 10).toFixed(1) %> m</strong>
+          </div>
+          <div class="detail-metric">
+            <span class="detail-metric__label">Poids</span>
+            <strong><%= (pokemon.weight / 10).toFixed(1) %> kg</strong>
+          </div>
+          <div class="detail-metric">
+            <span class="detail-metric__label">Experience</span>
+            <strong><%= pokemon.base_experience || 'N/A' %></strong>
+          </div>
+          <div class="detail-metric">
+            <span class="detail-metric__label">Talents</span>
+            <strong><%= pokemon.abilities.length %></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-xl-7">
+        <section class="detail-panel h-100">
+          <h3 class="section-title">Statistiques</h3>
+          <% pokemon.stats.forEach((stat) => {
+            const percent = Math.round((stat.base_stat / 255) * 100);
+          %>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="text-capitalize"><%= stat.stat.name.replace('-', ' ') %></span>
+                <strong><%= stat.base_stat %></strong>
+              </div>
+              <div class="stat-bar stat-bar--detail">
+                <div style="width:<%= percent %>%"></div>
+              </div>
+            </div>
+          <% }) %>
+        </section>
+      </div>
+
+      <div class="col-xl-5">
+        <section class="detail-panel h-100">
+          <h3 class="section-title">Faiblesses</h3>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <% if (weaknesses.length) { %>
+              <% weaknesses.forEach((entry) => { %>
+                <span class="type-badge type-<%= entry.name %>">
+                  <%= entry.name %> x<%= entry.multiplier %>
+                </span>
+              <% }) %>
+            <% } else { %>
+              <span class="text-muted">Aucune faiblesse marquee.</span>
+            <% } %>
+          </div>
+
+          <h3 class="section-title">Resistances</h3>
+          <div class="d-flex flex-wrap gap-2">
+            <% if (resistances.length) { %>
+              <% resistances.forEach((entry) => { %>
+                <span class="type-badge type-<%= entry.name %>">
+                  <%= entry.name %> x<%= entry.multiplier %>
+                </span>
+              <% }) %>
+            <% } else { %>
+              <span class="text-muted">Aucune resistance particuliere.</span>
+            <% } %>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-lg-6">
+        <section class="detail-panel h-100">
+          <h3 class="section-title">Capacites</h3>
+          <div class="ability-grid">
+            <% pokemon.abilities.forEach((a) => { %>
+              <a href="/capacites/<%= a.ability.name %>" class="ability-card">
+                <div class="text-capitalize"><%= a.ability.name %></div>
+                <span><%= a.is_hidden ? 'Capacite cachee' : 'Capacite standard' %></span>
+              </a>
+            <% }) %>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-lg-6">
+        <section class="detail-panel h-100">
+          <h3 class="section-title">Objets tenus</h3>
+          <% if (items.length > 0) { %>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <% items.forEach((item) => { %>
+                <span class="item-badge"><%= item %></span>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p class="text-muted mb-4">Ce Pokemon ne tient aucun objet dans les donnees affichees.</p>
+          <% } %>
+
+          <h3 class="section-title">Quelques attaques</h3>
+          <div class="d-flex flex-wrap gap-2">
+            <% moves.slice(0, 10).forEach((move) => { %>
+              <span class="move-badge"><%= move %></span>
+            <% }) %>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <section class="detail-panel mt-4">
+      <h3 class="section-title">Chaine d'evolution</h3>
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+        <% evolutions.forEach((evo) => { %>
+          <a
+            href="<%= evo.id ? `/objets/${evo.id}` : '#' %>"
+            class="evolution-card text-center text-decoration-none"
+            <%= evo.id ? '' : 'onclick="return false"' %>
+            title="Voir la fiche"
+          >
+            <% if (evo.image) { %>
+              <img src="<%= evo.image %>" loading="lazy" alt="<%= evo.name %>" width="96" height="96">
+            <% } else { %>
+              <div class="evo-placeholder">?</div>
+            <% } %>
+
+            <div class="text-capitalize mt-2 evo-name"><%= evo.name %></div>
+            <% if (evo.id) { %>
+              <div class="text-muted small">#<%= evo.id %></div>
+            <% } %>
+          </a>
+        <% }) %>
+      </div>
+    </section>
+
+    <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
+      <% if (pokemon.id > 1) { %>
+        <a href="/objets/<%= pokemon.id - 1 %>" class="btn btn-outline-primary">Precedent</a>
+      <% } else { %>
+        <span></span>
+      <% } %>
+
+      <a href="/objets" class="btn btn-dark">Retour Pokedex</a>
+
+      <% if (pokemon.id < 898) { %>
+        <a href="/objets/<%= pokemon.id + 1 %>" class="btn btn-outline-primary">Suivant</a>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="/public/favorites.js"></script>
+<script>
+function playCry() {
+  const audio = document.getElementById('pokemonCry');
+  if (!audio) return;
+  audio.currentTime = 0;
+  audio.play();
+}
+</script>
+
+</body>
+</html>

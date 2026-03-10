@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+      <span>PokeApp</span>
+      <span class="pokedex-led"></span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Ouvrir le menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+        <li class="nav-item">
+          <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/">Accueil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= currentPath.startsWith('/objets') ? 'active' : '' %>" href="/objets">Pokedex</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/favoris">Favoris</a>
+        </li>
+        <li class="nav-item ms-lg-3">
+          <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button">Dark</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
