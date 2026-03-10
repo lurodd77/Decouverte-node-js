@@ -2,14 +2,23 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Erreur</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
 </head>
-<body>
-<div class="container mt-5 text-center">
-  <h1>❌ Erreur</h1>
-  <p><%= message %></p>
-  <a href="/" class="btn btn-primary">Accueil</a>
-</div>
+<body class="pokedex-bg">
+  <%- include('partials/header') %>
+
+  <div class="container my-5">
+    <div class="pokemon-card text-center">
+      <p class="feature-panel__label mb-2">Navigation</p>
+      <h1 class="mb-3">Une erreur est survenue</h1>
+      <p class="text-muted mb-4"><%= message %></p>
+      <a href="/" class="btn btn-primary">Retour a l'accueil</a>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
 </body>
 </html>

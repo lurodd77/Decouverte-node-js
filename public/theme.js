@@ -5,7 +5,7 @@
   function setTheme(theme) {
     root.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    if (btn) btn.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+    if (btn) btn.textContent = theme === 'dark' ? 'Light' : 'Dark';
   }
 
   const saved = localStorage.getItem('theme') || 'light';
