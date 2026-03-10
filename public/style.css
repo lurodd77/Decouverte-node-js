@@ -559,6 +559,10 @@ body {
   animation-direction: reverse;
 }
 
+.gallery-marquee:hover .gallery-track {
+  animation-play-state: paused;
+}
+
 .sample-card {
   width: 170px;
   min-width: 170px;
